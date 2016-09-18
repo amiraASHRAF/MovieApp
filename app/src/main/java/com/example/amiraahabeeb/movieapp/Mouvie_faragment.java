@@ -67,19 +67,6 @@ public class Mouvie_faragment extends Fragment {
         return inflater.inflate(R.layout.fragment_mouvie_faragment, container, false);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -106,7 +93,7 @@ public class Mouvie_faragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

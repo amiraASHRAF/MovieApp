@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class  Movie {
+public class Movie {
     @SerializedName("poster_path")
     private String posterPath;
     @SerializedName("adult")

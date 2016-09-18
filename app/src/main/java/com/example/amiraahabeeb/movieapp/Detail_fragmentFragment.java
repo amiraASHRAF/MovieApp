@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,8 +39,6 @@ import java.util.Arrays;
  * A placeholder fragment containing a simple view.
  */
 public class Detail_fragmentFragment extends Fragment {
-    //    Mouvie_Database_helper helper;
-    DatabaseAdapter databaseAdapter;
     static TextView title;
     static TextView vote;
     static TextView originaltitle;
@@ -52,16 +48,35 @@ public class Detail_fragmentFragment extends Fragment {
     static Mouvie_parsing mouvie_parsing;
     static ListView trailer;
     static ListView reviews;
-    Button favorite;
     static ArrayAdapter<String> traileradapter;
     static ArrayAdapter<String> reviewsadapter;
     static Context context;
-
     static String[] keyStr;
     static String[] contentstr;
     static View view;
+    //    Mouvie_Database_helper helper;
+    DatabaseAdapter databaseAdapter;
+    Button favorite;
 
     public Detail_fragmentFragment() {
+    }
+
+    public static void Detail_data() {
+        if (title != null) {
+            title.setText(mouvie_parsing.getOriginal_title());
+            vote.setText(mouvie_parsing.getPopularity());
+            originaltitle.setText(mouvie_parsing.getOriginal_title());
+            release_date.setText(mouvie_parsing.getRelease_date());
+            poster_path = mouvie_parsing.getPoster_path();
+            FetchTask ask = new FetchTask();
+            ask.execute(mouvie_parsing.getid());
+
+            FetchReviewTask reviewTask = new FetchReviewTask();
+            reviewTask.execute(mouvie_parsing.getid());
+
+            Picasso.with(context).load("http://image.tmdb.org/t/p/w185/" + poster_path).into(posterpath_image);
+        } else
+            Toast.makeText(context, "ERRRRRRRRRRRRRRRO", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -111,7 +126,6 @@ public class Detail_fragmentFragment extends Fragment {
 
         return view;
     }
-
 
     public static class FetchTask extends AsyncTask<String, Void, String[]> {
         private final String LOG_TAG = FetchTask.class.getSimpleName();
@@ -230,8 +244,8 @@ public class Detail_fragmentFragment extends Fragment {
         @Override
         protected void onPostExecute(String[] result) {
             String trail[] = new String[result.length];
-            for (int i = 0; i<result.length;i++){
-                trail[i] = "Trailer "+(i+1);
+            for (int i = 0; i < result.length; i++) {
+                trail[i] = "Trailer " + (i + 1);
             }
             ArrayList<String> m = new ArrayList<String>(Arrays.asList(trail));
             traileradapter = new ArrayAdapter<String>(
@@ -241,24 +255,6 @@ public class Detail_fragmentFragment extends Fragment {
             trailer.setAdapter(traileradapter);
 
         }
-    }
-
-    public static void Detail_data() {
-        if (title != null) {
-            title.setText(mouvie_parsing.getOriginal_title());
-            vote.setText(mouvie_parsing.getPopularity());
-            originaltitle.setText(mouvie_parsing.getOriginal_title());
-            release_date.setText(mouvie_parsing.getRelease_date());
-            poster_path = mouvie_parsing.getPoster_path();
-            FetchTask ask = new FetchTask();
-            ask.execute(mouvie_parsing.getid());
-
-            FetchReviewTask reviewTask = new FetchReviewTask();
-            reviewTask.execute(mouvie_parsing.getid());
-
-            Picasso.with(context).load("http://image.tmdb.org/t/p/w185/" + poster_path).into(posterpath_image);
-        } else
-            Toast.makeText(context, "ERRRRRRRRRRRRRRRO", Toast.LENGTH_SHORT).show();
     }
 
     public static class FetchReviewTask extends AsyncTask<String, Void, String[]> {

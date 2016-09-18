@@ -1,8 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/movies_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
+
     <LinearLayout
         android:id="@+id/movies_layou"
         android:layout_width="match_parent"
@@ -47,11 +47,12 @@
 
                 <Button
                     android:id="@+id/Favorite"
-                    android:background="@color/colorAccent"
-
-                    android:text="favorites"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorAccent"
+                    android:text="favorites" />
+
                 <TextView
                     android:id="@+id/vote_average"
                     android:layout_width="wrap_content"
@@ -71,17 +72,17 @@
 
             android:id="@+id/reviews_list"
             android:layout_width="match_parent"
-            android:layout_height="200dp">
-        </ListView>
+            android:layout_height="200dp"></ListView>
 
         <ListView
-            android:layout_marginTop="50dp"
-
             android:id="@+id/trailer_list"
+
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="200dp"
+            android:layout_marginTop="50dp">
 
         </ListView>
 
 
-    </LinearLayout></ScrollView>
+    </LinearLayout>
+</ScrollView>

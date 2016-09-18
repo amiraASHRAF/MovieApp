@@ -1,28 +1,24 @@
 package com.example.amiraahabeeb.movieapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 /**
  * Created by Amira A. habeeb on 10/08/2016.
  */
 public class ImageAdapter extends BaseAdapter {
-    private Context mContext;
     Mouvie_parsing[] POSTER_MOVIES;
+    private Context mContext;
 
     public ImageAdapter(Context c, Mouvie_parsing[] POSTER_MOVIES) {
         mContext = c;
-        this.POSTER_MOVIES=POSTER_MOVIES;
+        this.POSTER_MOVIES = POSTER_MOVIES;
     }
 
     public int getCount() {
@@ -50,17 +46,17 @@ public class ImageAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-        Picasso.with(mContext).load("http://image.tmdb.org/t/p/w185/"+POSTER_MOVIES[position].getPoster_path()).into(imageView);
-      //  imageView.setImageResource(mThumbIds[position]);
+        Picasso.with(mContext).load("http://image.tmdb.org/t/p/w185/" + POSTER_MOVIES[position].getPoster_path()).into(imageView);
+        //  imageView.setImageResource(mThumbIds[position]);
         return imageView;
     }
 
- //  public class MovieViewHolder extends Re{
-   //    ImageView poster_image;
+    //  public class MovieViewHolder extends Re{
+    //    ImageView poster_image;
 
     //   public MovieViewHolder(View view) {
     //       super(view);
-     //      poster_image=//find view
-   //    }
-  // }
+    //      poster_image=//find view
+    //    }
+    // }
 }

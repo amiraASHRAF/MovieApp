@@ -14,12 +14,11 @@
 
 
     <fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/fragment_mani"
         android:name="com.example.amiraahabeeb.movieapp.Mouvie_faragment"
-        tools:layout="@layout/fragment_mouvie_faragment"/>
-
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_mouvie_faragment" />
 
 
 </RelativeLayout>

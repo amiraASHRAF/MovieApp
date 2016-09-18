@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -40,25 +38,42 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Detail_fragment extends AppCompatActivity {
-    MainActivity activity;
-    Mouvie_Database_helper mouvie_helper;
-    static   TextView title;
-    static  TextView vote;
+    static TextView title;
+    static TextView vote;
     static TextView originaltitle;
-    static  TextView release_date;
-    static  ImageView posterpath_image;
-    static   String poster_path;
+    static TextView release_date;
+    static ImageView posterpath_image;
+    static String poster_path;
     static Mouvie_parsing mouvie_parsing;
-    static  ListView trailer;
+    static ListView trailer;
     static ListView reviews;
-    Button favorite;
     static ArrayAdapter<String> traileradapter;
     static ArrayAdapter<String> reviewsadapter;
     static Context context;
-
     static String[] keyStr;
     static String[] contentstr;
+    MainActivity activity;
+    Mouvie_Database_helper mouvie_helper;
+    Button favorite;
 
+    public static void Detail_data() {
+
+        if (mouvie_parsing.getid() != null) {
+            title.setText(mouvie_parsing.getOriginal_title());
+            vote.setText(mouvie_parsing.getPopularity());
+            originaltitle.setText(mouvie_parsing.getOriginal_title());
+            release_date.setText(mouvie_parsing.getRelease_date());
+            poster_path = mouvie_parsing.getPoster_path();
+            FetchTask ask = new FetchTask();
+            ask.execute(mouvie_parsing.getid());
+
+            FetchReviewTask reviewTask = new FetchReviewTask();
+            reviewTask.execute(mouvie_parsing.getid());
+
+
+            Picasso.with(context).load("http://image.tmdb.org/t/p/w185/" + poster_path).into(posterpath_image);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +84,7 @@ public class Detail_fragment extends AppCompatActivity {
         Toolbar myChildToolbar =
                 (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myChildToolbar);
-       // farg_detail=findViewById(R.id.fragment_detail);
+        // farg_detail=findViewById(R.id.fragment_detail);
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
 
@@ -77,15 +92,14 @@ public class Detail_fragment extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
 
 
-
         title = (TextView) findViewById(R.id.title_a);
-        release_date = (TextView)  findViewById(R.id.date);
-        originaltitle = (TextView)  findViewById(R.id.original);
-        vote = (TextView)  findViewById(R.id.vote_average);
+        release_date = (TextView) findViewById(R.id.date);
+        originaltitle = (TextView) findViewById(R.id.original);
+        vote = (TextView) findViewById(R.id.vote_average);
         posterpath_image = (ImageView) findViewById(R.id.poster_image);
-        context=getBaseContext();
+        context = getBaseContext();
 
-        reviews=(ListView) findViewById(R.id.reviews_list);
+        reviews = (ListView) findViewById(R.id.reviews_list);
         trailer = (ListView) findViewById(R.id.trailer_list);
         trailer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -95,6 +109,26 @@ public class Detail_fragment extends AppCompatActivity {
             }
         });
         Detail_data();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_detail_fragment, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_most_popular) {
+
+            return true;
+        }
+
+        return true;
     }
 
     public static class FetchTask extends AsyncTask<String, Void, String[]> {
@@ -108,20 +142,17 @@ public class Detail_fragment extends AppCompatActivity {
             final String key = "key";
 
 
-
             JSONObject movieJson = new JSONObject(jsonStr);
             JSONArray movieArray = movieJson.getJSONArray(OWM_LIST);
 
             keyStr = new String[movieArray.length()];
             for (int i = 0; i < movieArray.length(); i++) {
                 JSONObject movie = movieArray.getJSONObject(i);
-                keyStr[i] =  movie.getString(key);
+                keyStr[i] = movie.getString(key);
             }
 
             return keyStr;
         }
-
-
 
 
         @Override
@@ -135,7 +166,7 @@ public class Detail_fragment extends AppCompatActivity {
             try {
 
                 final String FORECAST_BASE_URL =
-                        "http://api.themoviedb.org/3/movie/"+params[0]+"/videos?";
+                        "http://api.themoviedb.org/3/movie/" + params[0] + "/videos?";
                 final String APPID_PARAM = "api_key";
 
 
@@ -217,8 +248,8 @@ public class Detail_fragment extends AppCompatActivity {
         @Override
         protected void onPostExecute(String[] result) {
             String trail[] = new String[result.length];
-            for (int i = 0; i<result.length;i++){
-                trail[i] = "Trailer "+(i+1);
+            for (int i = 0; i < result.length; i++) {
+                trail[i] = "Trailer " + (i + 1);
             }
             ArrayList<String> m = new ArrayList<String>(Arrays.asList(trail));
             traileradapter = new ArrayAdapter<String>(
@@ -229,24 +260,7 @@ public class Detail_fragment extends AppCompatActivity {
 
         }
     }
-    public static void Detail_data() {
 
-        if (mouvie_parsing.getid() != null){
-            title.setText(mouvie_parsing.getOriginal_title());
-            vote.setText(mouvie_parsing.getPopularity());
-        originaltitle.setText(mouvie_parsing.getOriginal_title());
-        release_date.setText(mouvie_parsing.getRelease_date());
-        poster_path = mouvie_parsing.getPoster_path();
-        FetchTask ask = new FetchTask();
-        ask.execute(mouvie_parsing.getid());
-
-        FetchReviewTask reviewTask = new FetchReviewTask();
-        reviewTask.execute(mouvie_parsing.getid());
-
-
-        Picasso.with(context).load("http://image.tmdb.org/t/p/w185/" + poster_path).into(posterpath_image);
-    }
-    }
     public static class FetchReviewTask extends AsyncTask<String, Void, String[]> {
         private final String LOG_TAG = FetchTask.class.getSimpleName();
 
@@ -258,20 +272,17 @@ public class Detail_fragment extends AppCompatActivity {
             final String content = "content";
 
 
-
             JSONObject movieJson = new JSONObject(jsonStr);
             JSONArray movieArray = movieJson.getJSONArray(OWM_LIST);
 
             contentstr = new String[movieArray.length()];
             for (int i = 0; i < movieArray.length(); i++) {
                 JSONObject movie = movieArray.getJSONObject(i);
-                contentstr[i] =  movie.getString(content);
+                contentstr[i] = movie.getString(content);
             }
 
-            return  contentstr;
+            return contentstr;
         }
-
-
 
 
         @Override
@@ -285,7 +296,7 @@ public class Detail_fragment extends AppCompatActivity {
             try {
 
                 final String FORECAST_BASE_URL =
-                        "http://api.themoviedb.org/3/movie/"+params[0]+"/reviews?";
+                        "http://api.themoviedb.org/3/movie/" + params[0] + "/reviews?";
                 final String APPID_PARAM = "api_key";
 
 
@@ -367,8 +378,8 @@ public class Detail_fragment extends AppCompatActivity {
         @Override
         protected void onPostExecute(String[] result) {
 
-            ArrayList<String> m=new ArrayList<String>(Arrays.asList(result));
-            reviewsadapter=  new ArrayAdapter<String>(
+            ArrayList<String> m = new ArrayList<String>(Arrays.asList(result));
+            reviewsadapter = new ArrayAdapter<String>(
                     context, // The current context (this activity)
                     android.R.layout.simple_list_item_1,
                     m);
@@ -376,23 +387,5 @@ public class Detail_fragment extends AppCompatActivity {
 
         }
 
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_detail_fragment, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_most_popular) {
-
-            return true;
-        }
-
-        return true;
     }
 }
